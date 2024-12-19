@@ -1,0 +1,16 @@
+# Игнорируем настройки IDE (IntelliJ IDEA)
+.idea/
+
+# Игнорируем папку сборки Maven
+target/
+
+# Игнорируем логи и временные файлы
+*.log
+*.class
+
+# Игнорируем файлы ОС
+.DS_Store
+Thumbs.db
+
+# Игнорируем Maven Wrapper
+.mvn/
