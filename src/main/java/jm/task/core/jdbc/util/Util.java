@@ -4,17 +4,19 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import static jm.task.core.jdbc.constants.DBConstants.*;
-
 public class Util {
-    // реализуйте настройку соеденения с БД
+    // Полный URL для подключения к базе данных
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/user_database";
+    private static final String USER = "root";
+    private static final String PASSWORD = "bibuzi34";
+
+    // Реализуйте настройку соединения с БД
     private static Connection connection;
 
     public static Connection getConnection() {
         if (connection == null) {
             try {
-                return DriverManager.getConnection("jdbc:mysql://" + DB_HOST + ":" + PORT + "/" + DB,
-                        USER, PASSWORD);
+                return DriverManager.getConnection(DB_URL, USER, PASSWORD);
             } catch (SQLException e) {
                 System.out.println("Connection failed...");
                 throw new RuntimeException(e);
@@ -23,7 +25,7 @@ public class Util {
         return connection;
     }
 
-    public static void closeConnection()  {
+    public static void closeConnection() {
         if (connection != null) {
             try {
                 connection.close();
@@ -34,3 +36,4 @@ public class Util {
         }
     }
 }
+
