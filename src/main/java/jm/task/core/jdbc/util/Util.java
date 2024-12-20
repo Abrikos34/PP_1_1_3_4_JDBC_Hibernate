@@ -9,7 +9,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Util {
-    // JDBC Конфигурация
     private static final String DB_URL = "jdbc:mysql://localhost:3306/user_database";
     private static final String USER = "root";
     private static final String PASSWORD = "bibuzi34";
@@ -40,7 +39,6 @@ public class Util {
         }
     }
 
-    // Hibernate Конфигурация
     private static final SessionFactory sessionFactory;
 
     static {
@@ -73,4 +71,5 @@ public class Util {
         }
     }
 }
+
 
