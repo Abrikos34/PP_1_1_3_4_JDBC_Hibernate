@@ -1,9 +1,5 @@
 package jm.task.core.jdbc.util;
 
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-import jm.task.core.jdbc.model.User;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -38,38 +34,7 @@ public class Util {
             }
         }
     }
-
-    private static final SessionFactory sessionFactory;
-
-    static {
-        try {
-            sessionFactory = new Configuration()
-                    .setProperty("hibernate.connection.driver_class", "com.mysql.cj.jdbc.Driver")
-                    .setProperty("hibernate.connection.url", DB_URL)
-                    .setProperty("hibernate.connection.username", USER)
-                    .setProperty("hibernate.connection.password", PASSWORD)
-                    .setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect")
-                    .setProperty("hibernate.show_sql", "true")
-                    .setProperty("hibernate.hbm2ddl.auto", "update")
-                    .addAnnotatedClass(User.class)
-                    .buildSessionFactory();
-            System.out.println("Hibernate SessionFactory initialized!");
-        } catch (Throwable ex) {
-            System.err.println("Failed to initialize Hibernate SessionFactory: " + ex);
-            throw new ExceptionInInitializerError(ex);
-        }
-    }
-
-    public static SessionFactory getSessionFactory() {
-        return sessionFactory;
-    }
-
-    public static void closeSessionFactory() {
-        if (sessionFactory != null) {
-            sessionFactory.close();
-            System.out.println("Hibernate SessionFactory is closed!");
-        }
-    }
 }
+
 
 
