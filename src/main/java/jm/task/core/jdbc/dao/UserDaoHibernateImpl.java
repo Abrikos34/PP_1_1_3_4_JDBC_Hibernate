@@ -1,63 +1,40 @@
 package jm.task.core.jdbc.dao;
 
 import jm.task.core.jdbc.model.User;
+import jm.task.core.jdbc.util.Util;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 
 import java.util.List;
 
 public class UserDaoHibernateImpl implements UserDao {
-    private static final SessionFactory sessionFactory;
-
-    // Инициализация SessionFactory один раз на класс
-    static {
-        try {
-            sessionFactory = new Configuration()
-                    .setProperty("hibernate.connection.driver_class", "com.mysql.cj.jdbc.Driver")
-                    .setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/user_database")
-                    .setProperty("hibernate.connection.username", "root")
-                    .setProperty("hibernate.connection.password", "bibuzi34")
-                    .setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect")
-                    .setProperty("hibernate.show_sql", "true")
-                    .setProperty("hibernate.hbm2ddl.auto", "update")
-                    .addAnnotatedClass(User.class)
-                    .buildSessionFactory();
-            System.out.println("Hibernate SessionFactory initialized!");
-        } catch (Throwable ex) {
-            System.err.println("Failed to initialize Hibernate SessionFactory: " + ex);
-            throw new ExceptionInInitializerError(ex);
-        }
-    }
+    private final SessionFactory sessionFactory;
 
     public UserDaoHibernateImpl() {
+        this.sessionFactory = Util.getSessionFactory();
     }
 
     @Override
     public void createUsersTable() {
-        Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
-            transaction = session.beginTransaction();
+            session.beginTransaction();
             session.createSQLQuery("CREATE TABLE IF NOT EXISTS users " +
                     "(id BIGINT PRIMARY KEY AUTO_INCREMENT, " +
                     "name VARCHAR(50), lastName VARCHAR(50), age TINYINT)").executeUpdate();
-            transaction.commit();
+            session.getTransaction().commit();
         } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
             System.err.println("Failed to create table: " + e.getMessage());
         }
     }
 
     @Override
     public void dropUsersTable() {
-        Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
-            transaction = session.beginTransaction();
+            session.beginTransaction();
             session.createSQLQuery("DROP TABLE IF EXISTS users").executeUpdate();
-            transaction.commit();
+            session.getTransaction().commit();
         } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
             System.err.println("Failed to drop table: " + e.getMessage());
         }
     }
@@ -114,12 +91,7 @@ public class UserDaoHibernateImpl implements UserDao {
             System.err.println("Failed to clean users table: " + e.getMessage());
         }
     }
-
-    public static void closeSessionFactory() {
-        if (sessionFactory != null) {
-            sessionFactory.close();
-            System.out.println("Hibernate SessionFactory is closed!");
-        }
-    }
 }
+
+
 
