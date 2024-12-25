@@ -29,7 +29,6 @@ public class Main {
         service.cleanUsersTable();
         service.dropUsersTable();
 
-        Util.closeSessionFactory();
     }
 }
 

@@ -16,7 +16,6 @@ public class Util {
     private static SessionFactory sessionFactory;
     private static Connection connection;
 
-    // Ленивое создание JDBC Connection
     public static Connection getConnection() {
         if (connection == null) {
             try {
@@ -64,13 +63,6 @@ public class Util {
         }
     }
 
-    public static void closeSessionFactory() {
-        if (sessionFactory != null) {
-            sessionFactory.close();
-            sessionFactory = null;
-            System.out.println("Hibernate SessionFactory closed!");
-        }
-    }
 }
 
 
