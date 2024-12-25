@@ -16,18 +16,15 @@ public class Util {
     private static SessionFactory sessionFactory;
     private static Connection connection;
 
+    // Ленивое создание JDBC Connection
     public static Connection getConnection() {
         if (connection == null) {
-            synchronized (Util.class) {
-                if (connection == null) {
-                    try {
-                        connection = DriverManager.getConnection(DB_URL, USER, PASSWORD);
-                        System.out.println("JDBC Connection established!");
-                    } catch (SQLException e) {
-                        System.out.println("Failed to establish JDBC Connection...");
-                        throw new RuntimeException(e);
-                    }
-                }
+            try {
+                connection = DriverManager.getConnection(DB_URL, USER, PASSWORD);
+                System.out.println("JDBC Connection established!");
+            } catch (SQLException e) {
+                System.err.println("Failed to establish JDBC Connection...");
+                throw new RuntimeException(e);
             }
         }
         return connection;
@@ -35,25 +32,21 @@ public class Util {
 
     public static SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
-            synchronized (Util.class) {
-                if (sessionFactory == null) {
-                    try {
-                        sessionFactory = new Configuration()
-                                .setProperty("hibernate.connection.driver_class", "com.mysql.cj.jdbc.Driver")
-                                .setProperty("hibernate.connection.url", DB_URL)
-                                .setProperty("hibernate.connection.username", USER)
-                                .setProperty("hibernate.connection.password", PASSWORD)
-                                .setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect")
-                                .setProperty("hibernate.show_sql", "true")
-                                .setProperty("hibernate.hbm2ddl.auto", "update")
-                                .addAnnotatedClass(User.class)
-                                .buildSessionFactory();
-                        System.out.println("Hibernate SessionFactory initialized!");
-                    } catch (Throwable ex) {
-                        System.err.println("Failed to initialize Hibernate SessionFactory: " + ex);
-                        throw new ExceptionInInitializerError(ex);
-                    }
-                }
+            try {
+                sessionFactory = new Configuration()
+                        .setProperty("hibernate.connection.driver_class", "com.mysql.cj.jdbc.Driver")
+                        .setProperty("hibernate.connection.url", DB_URL)
+                        .setProperty("hibernate.connection.username", USER)
+                        .setProperty("hibernate.connection.password", PASSWORD)
+                        .setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect")
+                        .setProperty("hibernate.show_sql", "true")
+                        .setProperty("hibernate.hbm2ddl.auto", "update")
+                        .addAnnotatedClass(User.class)
+                        .buildSessionFactory();
+                System.out.println("Hibernate SessionFactory initialized!");
+            } catch (Throwable ex) {
+                System.err.println("Failed to initialize Hibernate SessionFactory: " + ex);
+                throw new ExceptionInInitializerError(ex);
             }
         }
         return sessionFactory;
@@ -79,6 +72,7 @@ public class Util {
         }
     }
 }
+
 
 
 
