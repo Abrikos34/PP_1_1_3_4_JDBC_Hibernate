@@ -48,7 +48,9 @@ public class UserDaoHibernateImpl implements UserDao {
             session.save(user);
             transaction.commit();
         } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
+            if (transaction != null) {
+                transaction.rollback();
+            }
             System.err.println("Failed to save user: " + e.getMessage());
         }
     }
@@ -64,7 +66,9 @@ public class UserDaoHibernateImpl implements UserDao {
             }
             transaction.commit();
         } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
+            if (transaction != null) {
+                transaction.rollback();
+            }
             System.err.println("Failed to remove user: " + e.getMessage());
         }
     }
@@ -87,11 +91,14 @@ public class UserDaoHibernateImpl implements UserDao {
             session.createQuery("DELETE FROM User").executeUpdate();
             transaction.commit();
         } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
+            if (transaction != null) {
+                transaction.rollback();
+            }
             System.err.println("Failed to clean users table: " + e.getMessage());
         }
     }
 }
+
 
 
 
